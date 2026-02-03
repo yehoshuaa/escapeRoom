@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Server Recovery - Level 1</title>
+
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+
+/* ===== GLOBAL ===== */
+
+body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#0b1a2f;
+    font-family:'JetBrains Mono', monospace;
+}
+
+/* Card */
+
+.container{
+    width:620px;
+    padding:45px;
+    border-radius:16px;
+    background:#111827;
+    box-shadow:0 15px 40px rgba(0,0,0,0.45);
+
+    display:flex;
+    flex-direction:column;
+    gap:28px;
+}
+
+/* Titles */
+
+h1{
+    color:white;
+    margin:0;
+}
+
+h2{
+    color:white;
+    margin-bottom:8px;
+}
+
+/* Text */
+
+.muted{
+    color:rgba(230,237,247,.75);
+}
+
+/* Highlight text */
+
+.highlight{
+    display:inline;
+    background:#f3f4f6;
+    color:black;
+    padding:4px 10px;
+    border-radius:6px;
+
+    box-decoration-break:clone;
+    -webkit-box-decoration-break:clone;
+
+    line-height:2.1;
+}
+
+/* Input row */
+
+.row{
+    display:flex;
+    gap:10px;
+    margin-top:12px;
+}
+
+/* Input */
+
+input{
+    flex:1;
+    padding:12px;
+    border-radius:8px;
+    border:none;
+    outline:none;
+}
+
+/* Button */
+
+button{
+    background:linear-gradient(135deg,#3b82f6,#2563eb);
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+button:hover{
+    transform:translateY(-2px);
+}
+
+/* Messages */
+
+.msg{
+    margin-top:10px;
+    font-weight:600;
+}
+
+.ok{ color:#22c55e; }
+.bad{ color:#ef4444; }
+
+/* LED */
+
+.led{
+    width:22px;
+    height:22px;
+    border-radius:50%;
+}
+
+.red{
+    background:#ef4444;
+    box-shadow:0 0 15px #ef4444;
+}
+
+.green{
+    background:#22c55e;
+    box-shadow:0 0 15px #22c55e;
+}
+
+.locked{
+    opacity:.4;
+    pointer-events:none;
+}
+
+.next{
+    margin-top:20px;
+}
+
+a{
+    color:white;
+    text-decoration:none;
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div class="container">
+
+<h1>Server Recovery — Level 1</h1>
+
+<p class="muted">
+De schoolserver is offline. Alleen medewerkers met basis security kennis mogen hem herstellen.
+Los de volgende checks op.
+</p>
+
+<!-- ================== PUZZLE 1 ================== -->
+
+<div>
+
+<h2>Puzzel 1 — Security Check</h2>
+
+<p class="highlight">
+In web development is het onveilig om geheime informatie in HTML te zetten,
+omdat iedereen kan zien hoe een pagina is opgebouwd. Soms laten developers
+per ongeluk een unlock key achter in een element.
+</p>
+
+<p class="muted">
+Tip: Inspecteer het audit element hieronder.
+</p>
+
+<!-- HIER ZIT HET ANTWOORD -->
+<div id="audit" data-key="online" class="muted">
+Server audit: status OFFLINE
+</div>
+
+<div class="row">
+<input id="answer1" placeholder="unlock key...">
+<button onclick="checkPuzzle1()">Check</button>
+</div>
+
+<div id="msg1" class="msg"></div>
+
+</div>
+
+
+<!-- ================== PUZZLE 2 ================== -->
+<div id="puzzle2" class="locked">
+
+  <h2>Puzzel 2 — Status Panel Calibreren</h2>
+
+  <p class="muted">
+    De server boot faalt omdat het statuspanel verkeerd staat ingesteld.
+    Zet de 4 lampjes in de juiste volgorde met HTML-kleurcodes (hex).
+  </p>
+
+  <p class="highlight">
+    Hint: De juiste volgorde staat in de pagina verstopt als “diagnostics”.
+    In echte security is dit slecht (secrets in HTML), maar vandaag is het jouw sleutel.
+  </p>
+
+  <!-- VERBORGEN VOLGORDE (plaintext) -->
+  <!-- diagnostics: #22c55e,#22c55e,#ef4444,#22c55e -->
+
+  <!-- Of als je liever data-attribute gebruikt (ook plaintext via inspect): -->
+  <div id="diag" data-seq="#22c55e,#22c55e,#ef4444,#22c55e" style="display:none;"></div>
+
+  <div class="muted" style="margin-top:10px;">
+    Panel LEDs:
+  </div>
+
+  <div style="display:flex; gap:14px; margin-top:10px; flex-wrap:wrap;">
+    <div style="display:flex; gap:8px; align-items:center;">
+      <div id="led1" class="led red"></div><span class="muted">LED 1</span>
+    </div>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <div id="led2" class="led red"></div><span class="muted">LED 2</span>
+    </div>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <div id="led3" class="led red"></div><span class="muted">LED 3</span>
+    </div>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <div id="led4" class="led red"></div><span class="muted">LED 4</span>
+    </div>
+  </div>
+
+  <p class="muted" style="margin-top:12px;">
+    Vul 4 hex-kleurcodes in, gescheiden door komma’s.<br>
+    Voorbeeld formaat: <code>#ffffff,#000000,#ff0000,#00ff00</code>
+  </p>
+
+  <div class="row">
+    <input id="seqInput" placeholder="#......,#......,#......,#......" autocomplete="off">
+    <button onclick="checkPuzzle2()">Apply</button>
+  </div>
+
+  <div id="msg2" class="msg"></div>
+
+</div>
+
+
+
+
+<!-- NEXT PAGE -->
+
+<div id="next" class="next" style="display:none;">
+<button>
+<a href="escape2.html">Ga naar Level 2 →</a>
+</button>
+</div>
+
+
+</div>
+
+
+
+<script>
+
+/* ===== Puzzle 1 ===== */
+
+function checkPuzzle1(){
+
+    const correct = document.getElementById("audit").dataset.key;
+    const input = document.getElementById("answer1").value.toLowerCase();
+    const msg = document.getElementById("msg1");
+
+    if(input === correct){
+
+        msg.textContent = "Correct ✅ Security check passed.";
+        msg.className = "msg ok";
+
+        document.getElementById("puzzle2").classList.remove("locked");
+
+    }else{
+        msg.textContent = "Nog niet goed. Inspecteer het audit element.";
+        msg.className = "msg bad";
+    }
+}
+
+/* ===== Puzzle 2 ===== */
+
+function normalizeSeq(s){
+  return (s || "")
+    .toLowerCase()
+    .replace(/\s+/g, ""); // spaties weg
+}
+
+function setLed(id, color){
+  const led = document.getElementById(id);
+  led.classList.remove("red", "green");
+  led.style.background = color;
+  led.style.boxShadow = `0 0 15px ${color}`;
+}
+
+function checkPuzzle2(){
+  const msg = document.getElementById("msg2");
+  const input = normalizeSeq(document.getElementById("seqInput").value);
+
+  // verborgen volgorde ophalen (plaintext in HTML via inspect)
+  const correct = normalizeSeq(document.getElementById("diag").dataset.seq);
+
+  if(input === correct){
+    msg.textContent = "Correct ✅ Panel gecalibreerd. Server kan verder booten.";
+    msg.className = "msg ok";
+
+    // LEDs zetten volgens de ingevoerde (correcte) volgorde
+    const parts = correct.split(",");
+    setLed("led1", parts[0]);
+    setLed("led2", parts[1]);
+    setLed("led3", parts[2]);
+    setLed("led4", parts[3]);
+
+    document.getElementById("next").style.display = "block";
+  } else {
+    msg.textContent = "Niet goed. Tip: kijk naar de diagnostics in de pagina (inspect).";
+    msg.className = "msg bad";
+  }
+}
+
+</script>
+
+</body>
+</html>

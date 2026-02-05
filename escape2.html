@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Server Recovery - Level 2</title>
+
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+
+/* ===== GLOBAL ===== */
+
+body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#0b1a2f;
+    font-family:'JetBrains Mono', monospace;
+}
+
+/* Card */
+
+.container{
+    width:620px;
+    padding:45px;
+    border-radius:16px;
+    background:#111827;
+    box-shadow:0 15px 40px rgba(0,0,0,0.45);
+
+    display:flex;
+    flex-direction:column;
+    gap:28px;
+}
+
+/* Titles */
+
+h1{
+    color:white;
+    margin:0;
+    margin-top: 200px;
+}
+
+h2{
+    color:white;
+    margin-bottom:8px;
+}
+
+/* Text */
+
+.muted{
+    color:rgba(230,237,247,.75);
+}
+
+/* Highlight text */
+
+.highlight{
+    display:inline;
+    background:#f3f4f6;
+    color:black;
+    padding:4px 10px;
+    border-radius:6px;
+
+    box-decoration-break:clone;
+    -webkit-box-decoration-break:clone;
+
+    line-height:2.1;
+}
+
+/* Input row */
+
+.row{
+    display:flex;
+    gap:10px;
+    margin-top:12px;
+}
+
+/* Input */
+
+input{
+    flex:1;
+    padding:12px;
+    border-radius:8px;
+    border:none;
+    outline:none;
+}
+
+/* Button */
+
+button{
+    background:linear-gradient(135deg,#3b82f6,#2563eb);
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+button:hover{
+    transform:translateY(-2px);
+}
+
+.next-btn{
+    align-self:flex-start;
+    background:linear-gradient(135deg,#3b82f6,#2563eb);
+    color:white;
+    padding:12px 20px;
+    border-radius:8px;
+    text-decoration:none;
+    font-weight:600;
+    transition:.25s;
+}
+
+.next-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 20px rgba(37,99,235,0.35);
+}
+
+/* Messages */
+
+.msg{
+    margin-top:10px;
+    font-weight:600;
+}
+
+.ok{ color:#22c55e; }
+.bad{ color:#ef4444; }
+
+/* LED */
+
+.led{
+    width:22px;
+    height:22px;
+    border-radius:50%;
+}
+
+.red{
+    background:#ef4444;
+    box-shadow:0 0 15px #ef4444;
+}
+
+.green{
+    background:#22c55e;
+    box-shadow:0 0 15px #22c55e;
+}
+
+.locked{
+    opacity:.4;
+    pointer-events:none;
+}
+
+.next{
+    margin-top:20px;
+}
+
+a{
+    color:white;
+    text-decoration:none;
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div class="container">
+
+<h1>Server Recovery — Level 2</h1>
+
+<p class="muted">
+De schoolserver is offline. Alleen medewerkers met basis security kennis mogen hem herstellen.
+Los de volgende checks op.
+</p>
+
+<!-- ================== PUZZLE 1 ================== -->
+
+<div>
+
+<h2>Puzzel 3 — Poort Herstellen</h2>
+
+<p class="muted">
+    De server reageert niet omdat de poort verkeerd is ingesteld.
+    Zet de poort op de juiste waarde om toegang te krijgen.
+  </p>
+
+<div class="row">
+  <button type="button" onclick="showHintPort()">Hint</button>
+</div>
+
+<p id="hintPort" class="muted" style="display:none;">
+  Hint: Open de Developer Tools (F12) en kijk in de <strong>console</strong>.
+  Servers laten vaak fouten zien wanneer een poort niet klopt.
+</p>
+
+
+  <div class="row">
+    <input id="portInput" placeholder="poortnummer..."  autocomplete="off">
+    <button onclick="checkPuzzle1()">Zet Poort</button>
+  </div>
+
+  <div id="msg1" class="msg"></div>
+
+</div>
+
+<!-- ================== PUZZLE 2 ================== -->
+<div id="puzzle2" class="locked">
+
+  <h2>Puzzel 4 — Reboot Puzzle</h2>
+
+  <p class="muted">
+    De server moet opnieuw opgestart worden, maar de juiste volgorde is cruciaal.
+    Volg de aanwijzingen om de reboot succesvol uit te voeren.
+  </p>
+
+  <p class="highlight">
+    Let op: Een verkeerde volgorde kan de server verder beschadigen. <br>
+    Stappen:<br>
+    -A: Zet server uit<br>
+    -B: Zet server aan<br>
+    -C: Wacht 10 seconden<br>
+    -D: Controleer of verbinding is hersteld
+  </p>
+
+  <div class="row">
+    <input id="rebootInput" placeholder="reboot volgorde bijv. d,c,b,a"  autocomplete="off">
+    <button onclick="checkPuzzle2()">Reboot</button>
+  </div>
+
+  <div id="msg2" class="msg"></div>
+
+</div>
+
+<!-- NEXT PAGE -->
+
+<a href="eindscherm.html" id="next" class="next-btn" style="display:none;">
+  Next →
+</a>
+
+
+</div>
+
+
+
+<script>
+
+/* ===== Puzzle 1 ===== */
+
+console.error(
+"[SERVER] Connection refused on port 3000.\n[SERVER] Fallback listener started on port 8080."
+);
+
+function checkPuzzle1(){
+
+  const msg = document.getElementById("msg1");
+  const input = document.getElementById("portInput").value;
+
+  // Voorbeeld van een correcte poortinstelling
+  const correctPort = "8080";
+
+  if(input === correctPort){
+    msg.textContent = "Correct ✅ Poort is hersteld.";
+    msg.className = "msg ok";
+
+    document.getElementById("puzzle2").classList.remove("locked");
+  } else {
+    msg.textContent = "Niet goed. Controleer de poortinstellingen.";
+    msg.className = "msg bad";
+  }
+}
+
+/* ===== Puzzle 2 ===== */
+
+function checkPuzzle2(){
+  const msg = document.getElementById("msg2");
+  const input = document.getElementById("rebootInput").value;
+
+  // Voorbeeld van een correcte reboot volgorde
+  const correctRebootOrder = "A,C,B,D";
+
+  if(input === correctRebootOrder){
+    msg.textContent = "Correct ✅ Server is succesvol opnieuw opgestart.";
+    msg.className = "msg ok";
+
+    document.getElementById("next").style.display = "block";
+  } else {
+    msg.textContent = "Niet goed. Volgorde klopt niet. Controleer de stappen.";
+    msg.className = "msg bad";
+  }
+}
+
+function showHintPort(){
+  document.getElementById("hintPort").style.display = "block";
+}
+
+
+</script>
+
+</body>
+</html>

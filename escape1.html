@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Server Recovery - Level 1</title>
+
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+
+/* ===== GLOBAL ===== */
+
+body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#0b1a2f;
+    font-family:'JetBrains Mono', monospace;
+}
+
+/* Card */
+
+.container{
+    width:620px;
+    padding:45px;
+    border-radius:16px;
+    background:#111827;
+    box-shadow:0 15px 40px rgba(0,0,0,0.45);
+
+    display:flex;
+    flex-direction:column;
+    gap:28px;
+}
+
+/* Titles */
+
+h1{
+    color:white;
+    margin:0;
+    margin-top: 240px;
+}
+
+h2{
+    color:white;
+    margin-bottom:8px;
+}
+
+/* Text */
+
+.muted{
+    color:rgba(230,237,247,.75);
+}
+
+/* Highlight text */
+
+.highlight{
+    display:inline;
+    background:#f3f4f6;
+    color:black;
+    padding:4px 10px;
+    border-radius:6px;
+
+    box-decoration-break:clone;
+    -webkit-box-decoration-break:clone;
+
+    line-height:2.1;
+}
+
+/* Input row */
+
+.row{
+    display:flex;
+    gap:10px;
+    margin-top:12px;
+}
+
+/* Input */
+
+input{
+    flex:1;
+    padding:12px;
+    border-radius:8px;
+    border:none;
+    outline:none;
+}
+
+/* Button */
+
+button{
+    background:linear-gradient(135deg,#3b82f6,#2563eb);
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+button:hover{
+    transform:translateY(-2px);
+}
+
+.next-btn{
+    align-self:flex-start;
+    background:linear-gradient(135deg,#3b82f6,#2563eb);
+    color:white;
+    padding:12px 20px;
+    border-radius:8px;
+    text-decoration:none;
+    font-weight:600;
+    transition:.25s;
+}
+
+.next-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 20px rgba(37,99,235,0.35);
+}
+
+
+/* Messages */
+
+.msg{
+    margin-top:10px;
+    font-weight:600;
+}
+
+.ok{ color:#22c55e; }
+.bad{ color:#ef4444; }
+
+/* LED */
+
+.led{
+    width:22px;
+    height:22px;
+    border-radius:50%;
+}
+
+.red{
+    background:#ef4444;
+    box-shadow:0 0 15px #ef4444;
+}
+
+.green{
+    background:#22c55e;
+    box-shadow:0 0 15px #22c55e;
+}
+
+.locked{
+    opacity:.4;
+    pointer-events:none;
+}
+
+.next{
+    margin-top:20px;
+}
+
+a{
+    color:white;
+    text-decoration:none;
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div class="container">
+
+<h1>Server Recovery — Level 1</h1>
+
+<p class="muted">
+De schoolserver is offline. Alleen medewerkers met basis security kennis mogen hem herstellen.
+Los de volgende checks op.
+</p>
+
+
+<div>
+
+<h2>Puzzel 1 — Security Check</h2>
+
+<p class="highlight">
+In web development is het onveilig om geheime informatie in HTML te zetten,
+omdat iedereen kan zien hoe een pagina is opgebouwd. Soms laten developers
+per ongeluk een "data-key" achter in een element.
+</p>
+
+
+<div id="audit" data-key="online" class="muted">
+<br> Server audit: status OFFLINE
+</div>
+
+<div class="row">
+<input id="answer1" placeholder="unlock key..."  autocomplete="off">
+<button onclick="checkPuzzle1()">Check</button>
+</div>
+
+<div id="msg1" class="msg"></div>
+
+<div class="row">
+  <button type="button" onclick="showHint1()">Hint</button>
+</div>
+
+<p id="hint1" class="muted" style="display:none; margin-top:10px;">
+  Hint: <strong>Inspecteer</strong> “Server audit” voor de wachtwoord.
+</p>
+
+</div>
+
+
+<div id="puzzle2" class="locked">
+
+  <h2>Puzzel 2 — Status Panel Calibreren</h2>
+
+  <p class="muted">
+    Het statuspanel toont meestal een paar groenen lampjes?
+    Volgens de runbook-notitie moet het panel bij recovery tonen:
+  </p>
+
+  <p class="highlight">
+    LED 1 = GROEN, LED 2 = GROEN, LED 3 = ROOD, LED 4 = GROEN.
+  </p>
+
+  <p class="muted">
+    Deze omgeving mist een invoer balkje? <br> Je zal creatief moeten zijn met je oplossing.
+  </p>
+
+  <div class="muted" style="margin-top:10px;">
+    Panel LEDs:
+  </div>
+
+  <div style="display:flex; gap:14px; margin-top:10px; flex-wrap:wrap;">
+    <div style="display:flex; gap:8px; align-items:center;">
+      <div id="led1" class="led red"></div><span class="muted">LED 1</span>
+    </div>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <div id="led2" class="led red"></div><span class="muted">LED 2</span>
+    </div>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <div id="led3" class="led red"></div><span class="muted">LED 3</span>
+    </div>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <div id="led4" class="led red"></div><span class="muted">LED 4</span>
+    </div>
+  </div>
+
+  <div class="row">
+    <button type="button" onclick="checkPanel()">Check panel</button>
+  </div>
+  <div class="row"> 
+        <button type="button" onclick="showHint2()">Hint</button>
+  </div>
+
+  <p id="hint2" class="muted" style="display:none; margin-top:10px;">
+    Hint: De led lampjes horen een volgorde te volgen, van "led red" naar "led green". 
+    <br> <strong>Inspecteer</strong> de lampjes als ze goed erin zitten.
+  </p>
+
+  <div id="msg2" class="msg"></div>
+
+</div>
+
+
+
+
+
+<!-- NEXT PAGE -->
+
+<a href="escape2.html" id="next" class="next-btn" style="display:none;">
+  Ga naar Level 2 →
+</a>
+
+
+</div>
+
+
+
+<script>
+
+/* ===== Puzzle 1 ===== */
+
+function checkPuzzle1(){
+
+    
+    const correct = document.getElementById("audit").dataset.key;
+    const input = document.getElementById("answer1").value.toLowerCase();
+    const msg = document.getElementById("msg1");
+
+    if(input === correct){
+
+        msg.textContent = "Correct ✅ Security check passed.";
+        msg.className = "msg ok";
+
+        document.getElementById("puzzle2").classList.remove("locked");
+
+    }else{
+        msg.textContent = "Incorrect.";
+        msg.className = "msg bad";
+    }
+}
+
+function showHint1(){
+  document.getElementById("hint1").style.display = "block";
+}
+
+
+/* ===== Puzzle 2 ===== */
+
+function showHint2(){
+  document.getElementById("hint2").style.display = "block";
+}
+
+function hasClass(id, cls){
+  return document.getElementById(id).classList.contains(cls);
+}
+
+function checkPanel(){
+  const msg = document.getElementById("msg2");
+
+  // gewenste volgorde: groen, groen, rood, groen
+  const ok =
+    hasClass("led1", "green") &&
+    hasClass("led2", "green") &&
+    hasClass("led3", "red") &&
+    hasClass("led4", "green");
+
+  if(ok){
+    msg.textContent = "Correct ✅ Panel staat goed. Server kan verder booten.";
+    msg.className = "msg ok";
+    document.getElementById("next").style.display = "block";
+  } else {
+    msg.textContent = "Nog niet goed.";
+    msg.className = "msg bad";
+  }
+}
+
+</script>
+
+</body>
+</html>

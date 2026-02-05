@@ -1,0 +1,28 @@
+# ======================
+# IDE / Editor files
+# ======================
+
+.vs/
+.vscode/
+
+# Visual Studio
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.vsidx
+*.sqlite
+*.db
+
+# ======================
+# OS files
+# ======================
+
+.DS_Store
+Thumbs.db
+
+# ======================
+# Logs / temp
+# ======================
+
+*.log

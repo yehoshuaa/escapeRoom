@@ -226,7 +226,7 @@ Los de volgende checks op.
   </p>
 
   <div class="row">
-    <input id="rebootInput" placeholder="reboot volgorde bijv. d,c,b,a"  autocomplete="off">
+    <input id="rebootInput" placeholder="Reboot volgorde bijv. D,C,B,A"  autocomplete="off">
     <button onclick="checkPuzzle2()">Reboot</button>
   </div>
 
@@ -262,7 +262,7 @@ function checkPuzzle1(){
   const correctPort = "8080";
 
   if(input === correctPort){
-    msg.textContent = "Correct ✅ Poort is hersteld.";
+    msg.textContent = "Correct! Poort is hersteld.";
     msg.className = "msg ok";
 
     document.getElementById("puzzle2").classList.remove("locked");
@@ -282,7 +282,7 @@ function checkPuzzle2(){
   const correctRebootOrder = "A,C,B,D";
 
   if(input === correctRebootOrder){
-    msg.textContent = "Correct ✅ Server is succesvol opnieuw opgestart.";
+    msg.textContent = "Correct! Server is succesvol opnieuw opgestart.";
     msg.className = "msg ok";
 
     document.getElementById("next").style.display = "block";

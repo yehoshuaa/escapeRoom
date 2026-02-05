@@ -205,7 +205,7 @@ per ongeluk een "data-key" achter in een element.
 </div>
 
 <p id="hint1" class="muted" style="display:none; margin-top:10px;">
-  Hint: <strong>Inspecteer</strong> “Server audit” voor de wachtwoord.
+  Hint: <strong>Inspecteer</strong> “Server audit” voor het wachtwoord.
 </p>
 
 </div>
@@ -216,8 +216,8 @@ per ongeluk een "data-key" achter in een element.
   <h2>Puzzel 2 — Status Panel Calibreren</h2>
 
   <p class="muted">
-    Het statuspanel toont meestal een paar groenen lampjes?
-    Volgens de runbook-notitie moet het panel bij recovery tonen:
+    Het statuspanel toont meestal een paar groene lampjes?
+    Volgens de runbook-notitie moet het panel bij recovery het volgende tonen:
   </p>
 
   <p class="highlight">
@@ -255,8 +255,8 @@ per ongeluk een "data-key" achter in een element.
   </div>
 
   <p id="hint2" class="muted" style="display:none; margin-top:10px;">
-    Hint: De led lampjes horen een volgorde te volgen, van "led red" naar "led green". 
-    <br> <strong>Inspecteer</strong> de lampjes als ze goed erin zitten.
+    Hint: De LED lampjes horen een volgorde te volgen, van "led red" naar "led green". 
+    <br> <strong>Inspecteer</strong> de lampjes en verander de kleur van de lampjes.
   </p>
 
   <div id="msg2" class="msg"></div>
@@ -291,7 +291,7 @@ function checkPuzzle1(){
 
     if(input === correct){
 
-        msg.textContent = "Correct ✅ Security check passed.";
+        msg.textContent = "Correct! Security check passed.";
         msg.className = "msg ok";
 
         document.getElementById("puzzle2").classList.remove("locked");
@@ -328,7 +328,7 @@ function checkPanel(){
     hasClass("led4", "green");
 
   if(ok){
-    msg.textContent = "Correct ✅ Panel staat goed. Server kan verder booten.";
+    msg.textContent = "Correct! Panel staat goed. Server kan verder booten.";
     msg.className = "msg ok";
     document.getElementById("next").style.display = "block";
   } else {

@@ -103,6 +103,23 @@ button:hover{
     transform:translateY(-2px);
 }
 
+.next-btn{
+    align-self:flex-start;
+    background:linear-gradient(135deg,#3b82f6,#2563eb);
+    color:white;
+    padding:12px 20px;
+    border-radius:8px;
+    text-decoration:none;
+    font-weight:600;
+    transition:.25s;
+}
+
+.next-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 20px rgba(37,99,235,0.35);
+}
+
+
 /* Messages */
 
 .msg{
@@ -177,7 +194,7 @@ per ongeluk een "data-key" achter in een element.
 </div>
 
 <div class="row">
-<input id="answer1" placeholder="unlock key...">
+<input id="answer1" placeholder="unlock key..."  autocomplete="off">
 <button onclick="checkPuzzle1()">Check</button>
 </div>
 
@@ -252,11 +269,9 @@ per ongeluk een "data-key" achter in een element.
 
 <!-- NEXT PAGE -->
 
-<div id="next" class="next" style="display:none;">
-<button>
-<a href="escape2.html">Ga naar Level 2 →</a>
-</button>
-</div>
+<a href="escape2.html" id="next" class="next-btn" style="display:none;">
+  Ga naar Level 2 →
+</a>
 
 
 </div>

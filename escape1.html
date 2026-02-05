@@ -160,7 +160,6 @@ De schoolserver is offline. Alleen medewerkers met basis security kennis mogen h
 Los de volgende checks op.
 </p>
 
-<!-- ================== PUZZLE 1 ================== -->
 
 <div>
 
@@ -169,16 +168,12 @@ Los de volgende checks op.
 <p class="highlight">
 In web development is het onveilig om geheime informatie in HTML te zetten,
 omdat iedereen kan zien hoe een pagina is opgebouwd. Soms laten developers
-per ongeluk een unlock key achter in een element.
+per ongeluk een "data-key" achter in een element.
 </p>
 
-<p class="muted">
-Tip: Inspecteer het audit element hieronder.
-</p>
 
-<!-- HIER ZIT HET ANTWOORD -->
 <div id="audit" data-key="online" class="muted">
-Server audit: status OFFLINE
+<br> Server audit: status OFFLINE
 </div>
 
 <div class="row">
@@ -188,29 +183,33 @@ Server audit: status OFFLINE
 
 <div id="msg1" class="msg"></div>
 
+<div class="row">
+  <button type="button" onclick="showHint1()">Hint</button>
+</div>
+
+<p id="hint1" class="muted" style="display:none; margin-top:10px;">
+  Hint: <strong>Inspecteer</strong> “Server audit” voor de wachtwoord.
+</p>
+
 </div>
 
 
-<!-- ================== PUZZLE 2 ================== -->
 <div id="puzzle2" class="locked">
 
   <h2>Puzzel 2 — Status Panel Calibreren</h2>
 
   <p class="muted">
-    De server boot faalt omdat het statuspanel verkeerd staat ingesteld.
-    Zet de 4 lampjes in de juiste volgorde met HTML-kleurcodes (hex).
+    Het statuspanel toont meestal een paar groenen lampjes?
+    Volgens de runbook-notitie moet het panel bij recovery tonen:
   </p>
 
   <p class="highlight">
-    Hint: De juiste volgorde staat in de pagina verstopt als “diagnostics”.
-    In echte security is dit slecht (secrets in HTML), maar vandaag is het jouw sleutel.
+    LED 1 = GROEN, LED 2 = GROEN, LED 3 = ROOD, LED 4 = GROEN.
   </p>
 
-  <!-- VERBORGEN VOLGORDE (plaintext) -->
-  <!-- diagnostics: #22c55e,#22c55e,#ef4444,#22c55e -->
-
-  <!-- Of als je liever data-attribute gebruikt (ook plaintext via inspect): -->
-  <div id="diag" data-seq="#22c55e,#22c55e,#ef4444,#22c55e" style="display:none;"></div>
+  <p class="muted">
+    Deze omgeving mist een invoer balkje? <br> Je zal creatief moeten zijn met je oplossing.
+  </p>
 
   <div class="muted" style="margin-top:10px;">
     Panel LEDs:
@@ -231,19 +230,22 @@ Server audit: status OFFLINE
     </div>
   </div>
 
-  <p class="muted" style="margin-top:12px;">
-    Vul 4 hex-kleurcodes in, gescheiden door komma’s.<br>
-    Voorbeeld formaat: <code>#ffffff,#000000,#ff0000,#00ff00</code>
-  </p>
-
   <div class="row">
-    <input id="seqInput" placeholder="#......,#......,#......,#......" autocomplete="off">
-    <button onclick="checkPuzzle2()">Apply</button>
+    <button type="button" onclick="checkPanel()">Check panel</button>
   </div>
+  <div class="row"> 
+        <button type="button" onclick="showHint2()">Hint</button>
+  </div>
+
+  <p id="hint2" class="muted" style="display:none; margin-top:10px;">
+    Hint: De led lampjes horen een volgorde te volgen, van "led red" naar "led green". 
+    <br> <strong>Inspecteer</strong> de lampjes als ze goed erin zitten.
+  </p>
 
   <div id="msg2" class="msg"></div>
 
 </div>
+
 
 
 
@@ -267,6 +269,7 @@ Server audit: status OFFLINE
 
 function checkPuzzle1(){
 
+    
     const correct = document.getElementById("audit").dataset.key;
     const input = document.getElementById("answer1").value.toLowerCase();
     const msg = document.getElementById("msg1");
@@ -279,47 +282,42 @@ function checkPuzzle1(){
         document.getElementById("puzzle2").classList.remove("locked");
 
     }else{
-        msg.textContent = "Nog niet goed. Inspecteer het audit element.";
+        msg.textContent = "Incorrect.";
         msg.className = "msg bad";
     }
 }
 
+function showHint1(){
+  document.getElementById("hint1").style.display = "block";
+}
+
+
 /* ===== Puzzle 2 ===== */
 
-function normalizeSeq(s){
-  return (s || "")
-    .toLowerCase()
-    .replace(/\s+/g, ""); // spaties weg
+function showHint2(){
+  document.getElementById("hint2").style.display = "block";
 }
 
-function setLed(id, color){
-  const led = document.getElementById(id);
-  led.classList.remove("red", "green");
-  led.style.background = color;
-  led.style.boxShadow = `0 0 15px ${color}`;
+function hasClass(id, cls){
+  return document.getElementById(id).classList.contains(cls);
 }
 
-function checkPuzzle2(){
+function checkPanel(){
   const msg = document.getElementById("msg2");
-  const input = normalizeSeq(document.getElementById("seqInput").value);
 
-  // verborgen volgorde ophalen (plaintext in HTML via inspect)
-  const correct = normalizeSeq(document.getElementById("diag").dataset.seq);
+  // gewenste volgorde: groen, groen, rood, groen
+  const ok =
+    hasClass("led1", "green") &&
+    hasClass("led2", "green") &&
+    hasClass("led3", "red") &&
+    hasClass("led4", "green");
 
-  if(input === correct){
-    msg.textContent = "Correct ✅ Panel gecalibreerd. Server kan verder booten.";
+  if(ok){
+    msg.textContent = "Correct ✅ Panel staat goed. Server kan verder booten.";
     msg.className = "msg ok";
-
-    // LEDs zetten volgens de ingevoerde (correcte) volgorde
-    const parts = correct.split(",");
-    setLed("led1", parts[0]);
-    setLed("led2", parts[1]);
-    setLed("led3", parts[2]);
-    setLed("led4", parts[3]);
-
     document.getElementById("next").style.display = "block";
   } else {
-    msg.textContent = "Niet goed. Tip: kijk naar de diagnostics in de pagina (inspect).";
+    msg.textContent = "Nog niet goed.";
     msg.className = "msg bad";
   }
 }

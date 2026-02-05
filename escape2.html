@@ -180,16 +180,22 @@ Los de volgende checks op.
 
 <div>
 
-<h2>Puzzel 1 — Poort Herstellen</h2>
+<h2>Puzzel 3 — Poort Herstellen</h2>
 
 <p class="muted">
     De server reageert niet omdat de poort verkeerd is ingesteld.
     Zet de poort op de juiste waarde om toegang te krijgen.
   </p>
 
-  <p class="highlight">
-    Tip: Kijk goed naar de foutmeldingen. Die verklappen vaak wat er mis is.
-  </p>
+<div class="row">
+  <button type="button" onclick="showHintPort()">Hint</button>
+</div>
+
+<p id="hintPort" class="muted" style="display:none;">
+  Hint: Open de Developer Tools (F12) en kijk in de <strong>console</strong>.
+  Servers laten vaak fouten zien wanneer een poort niet klopt.
+</p>
+
 
   <div class="row">
     <input id="portInput" placeholder="poortnummer..."  autocomplete="off">
@@ -203,7 +209,7 @@ Los de volgende checks op.
 <!-- ================== PUZZLE 2 ================== -->
 <div id="puzzle2" class="locked">
 
-  <h2>Puzzel 2 — Reboot Puzzle</h2>
+  <h2>Puzzel 4 — Reboot Puzzle</h2>
 
   <p class="muted">
     De server moet opnieuw opgestart worden, maar de juiste volgorde is cruciaal.
@@ -220,7 +226,7 @@ Los de volgende checks op.
   </p>
 
   <div class="row">
-    <input id="rebootInput" placeholder="reboot volgorde..."  autocomplete="off">
+    <input id="rebootInput" placeholder="reboot volgorde bijv. d,c,b,a"  autocomplete="off">
     <button onclick="checkPuzzle2()">Reboot</button>
   </div>
 
@@ -243,7 +249,9 @@ Los de volgende checks op.
 
 /* ===== Puzzle 1 ===== */
 
-console.error("Fout: Verbinding geweigerd op poort 3000. Probeer poort 8080.");
+console.error(
+"[SERVER] Connection refused on port 3000.\n[SERVER] Fallback listener started on port 8080."
+);
 
 function checkPuzzle1(){
 
@@ -283,6 +291,11 @@ function checkPuzzle2(){
     msg.className = "msg bad";
   }
 }
+
+function showHintPort(){
+  document.getElementById("hintPort").style.display = "block";
+}
+
 
 </script>
 
